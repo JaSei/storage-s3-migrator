@@ -1,0 +1,24 @@
+
+[[constraint]]
+  name = "github.com/minio/minio-go"
+  version = "5.0.0"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.5"
+
+[[constraint]]
+  name = "github.com/smartystreets/go-aws-auth"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "0.8.0"
+
+[[constraint]]
+  name = "github.com/alecthomas/kingpin"
+  version = "2.2.6"
+
+[[constraint]]
+  name = "github.com/cheggaaa/pb"
+  version = "2.0.6"
