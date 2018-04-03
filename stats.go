@@ -27,10 +27,6 @@ func statsHandler(statChannel <-chan stat, totalStatsChannel chan<- stat) {
 	progress.SetWriter(os.Stdout)
 	var total stat
 
-	//progress.PrependFunc(func(b *uiprogress.Bar) string {
-	//	return fmt.Sprintf("Dir %d/%d, %s", b.Current(), totalDirs, total.formatStats())
-	//})
-
 	for s := range statChannel {
 		progress.Increment()
 

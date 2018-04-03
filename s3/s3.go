@@ -60,16 +60,6 @@ func (hs3Client Hs3Client) MakeFolder(folder string) error {
 	return err
 }
 
-//func (hs3Client Hs3Client) GetObject(sha string) error {
-//	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/%s/%s/%s/%s", hs3Client.url.String(), hs3Client.namespace, sha[0:2], sha[2:4], sha[4:6], sha), nil)
-//	if err != nil {
-//		return err
-//	}
-//
-//	_, err = hs3Client.doRequestNoBody(req)
-//	return err
-//}
-
 func (hs3Client Hs3Client) UploadObject(path pathutil.Path) (int64, error) {
 	md5Hash, sha256Hash, err := calculateHashes(path)
 	if err != nil {

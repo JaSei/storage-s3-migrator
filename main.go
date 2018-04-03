@@ -57,8 +57,7 @@ func main() {
 
 				dir.Visit(func(path pathutil.Path) {
 					startUploadTime := time.Now()
-					//size, err := s3cli.UploadObject(path)
-					size, err := int64(0), error(nil)
+					size, err := s3cli.UploadObject(path)
 					duration := time.Since(startUploadTime)
 
 					dirStat.duration += duration
@@ -71,8 +70,6 @@ func main() {
 						dirStat.ok += 1
 						log.Info(path)
 					}
-
-					//log.Fatal("end")
 
 				}, pathutil.VisitOpt{})
 			})

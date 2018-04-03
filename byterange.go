@@ -1,9 +1,7 @@
 package main
 
 import (
-	//	"github.com/JaSei/pathutil-go"
 	"github.com/pkg/errors"
-	//	log "github.com/sirupsen/logrus"
 )
 
 type byteRange struct {
@@ -51,21 +49,3 @@ func (shard byteRange) lister(listerFunc func(int, byteFolder)) {
 func (shard byteRange) length() uint {
 	return (uint(shard.max) - uint(shard.min)) + 1
 }
-
-//func (shard byteRange) visitTree(baseDir pathutil.Path, visitFunc func(pathutil.Path)) {
-//	for _, firstByte := range shard.list().shuffle() {
-//		for _, secondByte := range (byteRange{0, 255}.list().shuffle()) {
-//			for _, thirdByte := range (byteRange{0, 255}.list().shuffle()) {
-//				dir, _ := pathutil.New(baseDir.String(), firstByte.hex(), secondByte.hex(), thirdByte.hex())
-//
-//				if !dir.IsDir() {
-//					log.Debugf("Skip %s", dir)
-//					continue
-//				}
-//
-//				visitFunc(dir)
-//			}
-//		}
-//	}
-//
-//}
