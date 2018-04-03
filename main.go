@@ -6,7 +6,7 @@ import (
 
 	"github.com/JaSei/pathutil-go"
 	"github.com/alecthomas/kingpin"
-	"github.com/avast/primary-storage-migrator/s3"
+	"github.com/avast/storage-s3-migrator/s3"
 	log "github.com/sirupsen/logrus"
 )
 
