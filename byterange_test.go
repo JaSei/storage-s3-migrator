@@ -10,13 +10,13 @@ func TestShardHex(t *testing.T) {
 	t.Run("00-FF, 1 => 00-FF", func(t *testing.T) {
 		shards, err := shardHex(0xFF, 1)
 		assert.NoError(t, err)
-		assert.Equal(t, []byteRange{byteRange{0, 0xff}}, shards)
+		assert.Equal(t, []byteRange{{0, 0xff}}, shards)
 	})
 
 	t.Run("00-FF, 2 => 00-7F, 80-FF", func(t *testing.T) {
 		shards, err := shardHex(0xFF, 2)
 		assert.NoError(t, err)
-		assert.Equal(t, []byteRange{byteRange{0, 0x7f}, byteRange{0x80, 0xff}}, shards)
+		assert.Equal(t, []byteRange{{0, 0x7f}, {0x80, 0xff}}, shards)
 
 	})
 
@@ -24,14 +24,14 @@ func TestShardHex(t *testing.T) {
 
 		shards, err := shardHex(0xFF, 3)
 		assert.NoError(t, err)
-		assert.Equal(t, []byteRange{byteRange{0, 0x54}, byteRange{0x55, 0xA9}, byteRange{0xAA, 0xFF}}, shards)
+		assert.Equal(t, []byteRange{{0, 0x54}, {0x55, 0xA9}, {0xAA, 0xFF}}, shards)
 	})
 
 	t.Run("00-FF, 8 => 00-1F, 20-3F, , ,...", func(t *testing.T) {
 
 		shards, err := shardHex(0xFF, 8)
 		assert.NoError(t, err)
-		assert.Equal(t, []byteRange{byteRange{0, 0x1F}, byteRange{0x20, 0x3F}, byteRange{0x40, 0x5F}, byteRange{0x60, 0x7F}, byteRange{0x80, 0x9F}, byteRange{0xA0, 0xBF}, byteRange{0xC0, 0xDF}, byteRange{0xE0, 0xFF}}, shards)
+		assert.Equal(t, []byteRange{{0, 0x1F}, {0x20, 0x3F}, {0x40, 0x5F}, {0x60, 0x7F}, {0x80, 0x9F}, {0xA0, 0xBF}, {0xC0, 0xDF}, {0xE0, 0xFF}}, shards)
 	})
 
 	t.Run("00-FF, 255 => 00, 01, ..., FF", func(t *testing.T) {

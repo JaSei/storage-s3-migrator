@@ -38,15 +38,15 @@ func main() {
 	go statsHandler(statChannel, totalStatsChannel)
 
 	wg := sync.WaitGroup{}
-	for i, shardFolder := range shards {
+	for i, shardDir := range shards {
 		wg.Add(1)
-		go func(id int) {
+		go func(id int, shardDir byteRange) {
 			defer wg.Done()
 
 			s3cli := newClient()
 			log.Info(s3cli)
 
-			shardFolder.visitTree(dirPath, func(dir pathutil.Path) {
+			shardDir.visitTree(dirPath, func(dir pathutil.Path) {
 				dirStat := stat{}
 				defer func() { statChannel <- dirStat }()
 
@@ -74,7 +74,7 @@ func main() {
 				}, pathutil.VisitOpt{})
 			})
 
-		}(i)
+		}(i, shardDir)
 	}
 
 	wg.Wait()
