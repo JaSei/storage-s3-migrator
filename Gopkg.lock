@@ -39,9 +39,15 @@
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
-  packages = ["spew","spew/testdata"]
+  packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
   version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/dustin/go-humanize"
+  packages = ["."]
+  revision = "bb3d318650d48840a39aa21a027c6630e198e626"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -74,45 +80,27 @@
   version = "v1.0.5"
 
 [[projects]]
-  name = "github.com/smartystreets/assertions"
-  packages = [".","internal/go-render/render","internal/oglematchers","should"]
-  revision = "7678a5452ebea5b7090a6b163f844c133f523da2"
-  version = "1.8.3"
-
-[[projects]]
   name = "github.com/smartystreets/go-aws-auth"
   packages = ["."]
   revision = "8ef1316913ee4f44bc48c2456e44a5c1c68ea53b"
   version = "1.0.0"
 
 [[projects]]
-  name = "github.com/smartystreets/gunit"
-  packages = ["."]
-  revision = "2968b78ab862fcbae12cac559320d5002c661439"
-  version = "1.2.0"
-
-[[projects]]
-  name = "github.com/stretchr/objx"
-  packages = ["."]
-  revision = "facf9a85c22f48d2f52f2380e4efce1768749a89"
-  version = "v0.1"
-
-[[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert","http","mock","require"]
+  packages = ["assert"]
   revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
   version = "v1.2.1"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["acme","acme/autocert","blake2b","blowfish","cast5","cryptobyte","cryptobyte/asn1","curve25519","ed25519","ed25519/internal/edwards25519","hkdf","internal/chacha20","md4","nacl/auth","nacl/box","nacl/secretbox","openpgp","openpgp/armor","openpgp/elgamal","openpgp/errors","openpgp/packet","openpgp/s2k","pbkdf2","pkcs12/internal/rc2","poly1305","ripemd160","salsa20/salsa","scrypt","ssh","ssh/agent","ssh/terminal","ssh/testdata"]
+  packages = ["ssh/terminal"]
   revision = "88942b9c40a4c9d203b82b3731787b672d6e809b"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
-  packages = ["plan9","unix","windows","windows/registry","windows/svc","windows/svc/debug","windows/svc/eventlog","windows/svc/mgr"]
+  packages = ["unix","windows"]
   revision = "91ee8cde435411ca3f1cd365e8f20131aed4d0a1"
 
 [[projects]]
@@ -120,12 +108,6 @@
   packages = ["."]
   revision = "b24eb346a94c3ba12c1da1e564dbac1b498a77ce"
   version = "v1.1.1"
-
-[[projects]]
-  name = "gopkg.in/airbrake/gobrake.v2"
-  packages = ["."]
-  revision = "668876711219e8b0206e2994bf0a59d889c775aa"
-  version = "v2.0.9"
 
 [[projects]]
   name = "gopkg.in/cheggaaa/pb.v2"
@@ -138,12 +120,6 @@
   packages = ["."]
   revision = "507f6050b8568533fb3f5504de8e5205fa62a114"
   version = "v1.6.0"
-
-[[projects]]
-  name = "gopkg.in/gemnasium/logrus-airbrake-hook.v2"
-  packages = ["."]
-  revision = "e928b033a891c0175fb643d5aa0779e86325eb12"
-  version = "v2.1.2"
 
 [[projects]]
   name = "gopkg.in/mattn/go-colorable.v0"
@@ -166,6 +142,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8d1d90afdb5ba58620318fbd0c024975e14361d2b80c0cd76625863961dd006c"
+  inputs-digest = "51aafed48813ecf49ebbb1fd07c70d73f6f39c8c48d7001161021a72b88184e4"
   solver-name = "gps-cdcl"
   solver-version = 1

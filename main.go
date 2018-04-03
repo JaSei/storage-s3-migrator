@@ -18,11 +18,15 @@ var (
 	user               = kingpin.Flag("user", "username").Required().String()
 	pass               = kingpin.Flag("pass", "password").Required().String()
 	customLastModified = kingpin.Flag("custom-last-modifed", "set x-amz-meta-Last-Modified header with last modification time of source file").Bool()
+	debug              = kingpin.Flag("debug", "log debug").Bool()
 )
 
 func main() {
 	kingpin.Parse()
-	log.SetLevel(log.DebugLevel)
+
+	if *debug {
+		log.SetLevel(log.DebugLevel)
+	}
 
 	dirPath, err := pathutil.New(*dir)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/cheggaaa/pb"
+	"github.com/dustin/go-humanize"
 )
 
 type stat struct {
@@ -44,5 +45,5 @@ func statsHandler(statChannel <-chan stat, totalStatsChannel chan<- stat) {
 }
 
 func (s stat) formatStats() string {
-	return fmt.Sprintf("Uploaded objects: %d (%d fail), Total size: %dMB", s.ok, s.err, s.size/totalDirs)
+	return fmt.Sprintf("Uploaded objects: %d (%d fail), Total size: %s, Speed: %s/s", s.ok, s.err, humanize.Bytes(uint64(s.size)), humanize.Bytes(uint64(float64(s.size)/s.duration.Seconds())))
 }
