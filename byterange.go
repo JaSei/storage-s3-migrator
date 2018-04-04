@@ -11,10 +11,10 @@ type byteRange struct {
 
 func shardHex(max, count byteFolder) ([]byteRange, error) {
 	if count == 0 {
-		return []byteRange{}, errors.New("Count must be grather then zero")
+		return []byteRange{}, errors.New("Count must be greater then zero")
 	}
 	if count > max {
-		return []byteRange{}, errors.New("Count is grather then max")
+		return []byteRange{}, errors.New("Count is greater than max")
 	}
 
 	piece := (int(max) + 1) / int(count)
