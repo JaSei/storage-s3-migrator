@@ -184,6 +184,10 @@ func (hs3Client Hs3Client) doRequest(req *http.Request) (*http.Response, error) 
 func (hs3Client Hs3Client) doRequestClosedBody(req *http.Request) (res *http.Response, err error) {
 	res, err = hs3Client.doRequest(req)
 
+	if err != nil {
+		return nil, err
+	}
+
 	defer func() {
 		if errClose := res.Body.Close(); errClose != nil {
 			err = errClose
