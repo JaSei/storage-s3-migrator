@@ -6,7 +6,9 @@ import (
 
 	"github.com/JaSei/pathutil-go"
 	"github.com/alecthomas/kingpin"
+	"github.com/avast/retry-go"
 	"github.com/avast/storage-s3-migrator/s3"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -61,7 +63,18 @@ func main() {
 
 				dir.Visit(func(path pathutil.Path) {
 					startUploadTime := time.Now()
-					size, err := s3cli.UploadObject(path)
+					var size int64
+					err := retry.Do(func() error {
+						size, err = s3cli.UploadObject(path)
+						return err
+					},
+						retry.RetryIf(func(err error) bool {
+							return err.Error() != "409 Conflict"
+						}),
+						retry.OnRetry(func(n uint, err error) {
+							log.Debugf("Retry %d: %s", n, err.Error())
+						}),
+					)
 					duration := time.Since(startUploadTime)
 
 					dirStat.duration += duration
@@ -69,7 +82,7 @@ func main() {
 
 					if err != nil {
 						dirStat.err += 1
-						log.Error(err)
+						log.Error(errors.Wrap(err, path.String()))
 					} else {
 						dirStat.ok += 1
 						log.Info(path)

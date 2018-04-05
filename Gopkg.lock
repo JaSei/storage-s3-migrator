@@ -32,6 +32,12 @@
   version = "1.0.0"
 
 [[projects]]
+  name = "github.com/avast/retry-go"
+  packages = ["."]
+  revision = "5469272a8171235352a56af37e5f7facf814423f"
+  version = "1.0.1"
+
+[[projects]]
   name = "github.com/cheggaaa/pb"
   packages = ["."]
   revision = "c112833d014c77e8bde723fd0158e3156951639f"
@@ -142,6 +148,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "51aafed48813ecf49ebbb1fd07c70d73f6f39c8c48d7001161021a72b88184e4"
+  inputs-digest = "5c34f79d204894d0512b99005a9a65ed6afbfbab33ad1aef50bd1e5b5820e76a"
   solver-name = "gps-cdcl"
   solver-version = 1
