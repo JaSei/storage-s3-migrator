@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"sync"
 	"time"
 
@@ -81,10 +82,15 @@ func main() {
 					dirStat.size += size
 
 					if err != nil {
-						dirStat.err += 1
-						log.Error(errors.Wrap(err, path.String()))
+						if strings.Contains(err.Error(), "409 Conflict") {
+							dirStat.conflict++
+							log.Info(errors.Wrap(err, path.String()))
+						} else {
+							dirStat.err++
+							log.Error(errors.Wrap(err, path.String()))
+						}
 					} else {
-						dirStat.ok += 1
+						dirStat.ok++
 						log.Info(path)
 					}
 

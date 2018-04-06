@@ -14,6 +14,7 @@ type stat struct {
 	ok       int
 	size     int64
 	duration time.Duration
+	conflict int
 }
 
 func makeStatChannels(size uint8) (chan stat, chan stat) {
@@ -45,5 +46,5 @@ func statsHandler(statChannel <-chan stat, totalStatsChannel chan<- stat) {
 }
 
 func (s stat) formatStats() string {
-	return fmt.Sprintf("Uploaded objects: %d (%d fail), Total size: %s, Speed: %s/s", s.ok, s.err, humanize.Bytes(uint64(s.size)), humanize.Bytes(uint64(float64(s.size)/s.duration.Seconds())))
+	return fmt.Sprintf("Uploaded objects: %d, Conflicts: %d, Failed: %d, Total size: %s, Speed: %s/s", s.ok, s.conflict, s.err, humanize.Bytes(uint64(s.size)), humanize.Bytes(uint64(float64(s.size)/s.duration.Seconds())))
 }
