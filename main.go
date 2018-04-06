@@ -63,36 +63,47 @@ func main() {
 				}
 
 				dir.Visit(func(path pathutil.Path) {
-					startUploadTime := time.Now()
 					var size int64
-					err := retry.Do(func() error {
-						size, err = s3cli.UploadObject(path)
-						return err
-					},
-						retry.RetryIf(func(err error) bool {
-							return err.Error() != "409 Conflict"
-						}),
-						retry.OnRetry(func(n uint, err error) {
-							log.Debugf("Retry %d: %s", n, err.Error())
-						}),
-					)
-					duration := time.Since(startUploadTime)
+					startUploadTime := time.Now()
 
+					exists, err := s3cli.ExistsObject(path)
+					if err != nil {
+						log.Error(err)
+					}
+
+					if exists {
+						dirStat.exists++
+						log.Infof("Path %s already inserted", path)
+					} else {
+						err := retry.Do(func() error {
+							size, err = s3cli.UploadObject(path)
+							return err
+						},
+							retry.RetryIf(func(err error) bool {
+								return err.Error() != "409 Conflict"
+							}),
+							retry.OnRetry(func(n uint, err error) {
+								log.Debugf("Retry %d: %s", n, err.Error())
+							}),
+						)
+
+						if err != nil {
+							if strings.Contains(err.Error(), "409 Conflict") {
+								dirStat.exists++
+								log.Info(errors.Wrap(err, path.String()))
+							} else {
+								dirStat.err++
+								log.Error(errors.Wrap(err, path.String()))
+							}
+						} else {
+							dirStat.ok++
+							log.Info(path)
+						}
+					}
+
+					duration := time.Since(startUploadTime)
 					dirStat.duration += duration
 					dirStat.size += size
-
-					if err != nil {
-						if strings.Contains(err.Error(), "409 Conflict") {
-							dirStat.conflict++
-							log.Info(errors.Wrap(err, path.String()))
-						} else {
-							dirStat.err++
-							log.Error(errors.Wrap(err, path.String()))
-						}
-					} else {
-						dirStat.ok++
-						log.Info(path)
-					}
 
 				}, pathutil.VisitOpt{})
 			})

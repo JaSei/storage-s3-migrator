@@ -60,6 +60,28 @@ func (hs3Client Hs3Client) MakeFolder(folder string) error {
 	return err
 }
 
+func (hs3Client Hs3Client) ExistsObject(path pathutil.Path) (bool, error) {
+	shaNameHash, err := hashutil.StringToHash(sha256.New(), strings.TrimRight(path.Basename(), ".dat"))
+	if err != nil {
+		return false, err
+	}
+
+	req, err := http.NewRequest(http.MethodHead, hs3Client.shaUrl(shaNameHash.String()), nil)
+	if err != nil {
+		return false, errors.Wrap(err, "NewRequest")
+	}
+
+	res, err := hs3Client.doRequestClosedBody(req)
+	if err != nil {
+		return false, err
+	}
+
+	if res.StatusCode == 200 {
+		return true, nil
+	}
+	return false, nil
+}
+
 func (hs3Client Hs3Client) UploadObject(path pathutil.Path) (int64, error) {
 	md5Hash, sha256Hash, err := calculateHashes(path)
 	if err != nil {
@@ -81,12 +103,7 @@ func (hs3Client Hs3Client) UploadObject(path pathutil.Path) (int64, error) {
 		return 0, errors.Wrap(err, "OpenReader")
 	}
 
-	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf(
-		"%s/%s/%s/%s/%s/%s",
-		hs3Client.url.String(),
-		hs3Client.namespace,
-		sha[0:2], sha[2:4], sha[4:6], sha,
-	), reader)
+	req, err := http.NewRequest(http.MethodPut, hs3Client.shaUrl(sha), reader)
 	if err != nil {
 		return 0, errors.Wrap(err, "NewRequest")
 	}
@@ -105,6 +122,15 @@ func (hs3Client Hs3Client) UploadObject(path pathutil.Path) (int64, error) {
 	}
 
 	return req.ContentLength, nil
+}
+
+func (hs3Client Hs3Client) shaUrl(sha string) string {
+	return fmt.Sprintf(
+		"%s/%s/%s/%s/%s/%s",
+		hs3Client.url.String(),
+		hs3Client.namespace,
+		sha[0:2], sha[2:4], sha[4:6], sha,
+	)
 }
 
 func (hs3Client Hs3Client) setHeaders(req *http.Request, path pathutil.Path, md5Hash *hashutil.Hash) error {
