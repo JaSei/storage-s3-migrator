@@ -66,12 +66,7 @@ func main() {
 					var size int64
 					startUploadTime := time.Now()
 
-					exists, err := s3cli.ExistsObject(path)
-					if err != nil {
-						log.Error(err)
-					}
-
-					if exists {
+					if err = s3cli.ExistsObject(path); err == nil {
 						dirStat.exists++
 						log.Infof("Path %s already inserted", path)
 					} else {

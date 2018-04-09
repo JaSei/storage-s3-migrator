@@ -60,26 +60,20 @@ func (hs3Client Hs3Client) MakeFolder(folder string) error {
 	return err
 }
 
-func (hs3Client Hs3Client) ExistsObject(path pathutil.Path) (bool, error) {
+func (hs3Client Hs3Client) ExistsObject(path pathutil.Path) error {
 	shaNameHash, err := hashutil.StringToHash(sha256.New(), strings.TrimRight(path.Basename(), ".dat"))
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	req, err := http.NewRequest(http.MethodHead, hs3Client.shaUrl(shaNameHash.String()), nil)
 	if err != nil {
-		return false, errors.Wrap(err, "NewRequest")
+		return errors.Wrap(err, "NewRequest")
 	}
 
-	res, err := hs3Client.doRequestClosedBody(req)
-	if err != nil {
-		return false, err
-	}
+	_, err = hs3Client.doRequestClosedBody(req)
 
-	if res.StatusCode == 200 {
-		return true, nil
-	}
-	return false, nil
+	return err
 }
 
 func (hs3Client Hs3Client) UploadObject(path pathutil.Path) (int64, error) {
