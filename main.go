@@ -51,7 +51,6 @@ func main() {
 			defer wg.Done()
 
 			s3cli := newClient()
-			log.Info(s3cli)
 
 			shardDir.visitTree(dirPath, func(dir pathutil.Path) {
 				dirStat := stat{}
@@ -70,10 +69,11 @@ func main() {
 						dirStat.exists++
 						log.Infof("Path %s already inserted", path)
 					} else {
-						err := retry.Do(func() error {
-							size, err = s3cli.UploadObject(path)
-							return err
-						},
+						err := retry.Do(
+							func() error {
+								size, err = s3cli.UploadObject(path)
+								return err
+							},
 							retry.RetryIf(func(err error) bool {
 								return err.Error() != "409 Conflict"
 							}),

@@ -187,32 +187,30 @@ func (hs3Client Hs3Client) doRequest(req *http.Request) (*http.Response, error) 
 	}
 
 	if err = logRequest(res.Request); err != nil {
-		return nil, errors.Wrap(err, "logRequest")
+		return res, errors.Wrap(err, "logRequest")
 	}
 
 	if err = logResponse(res); err != nil {
-		return nil, errors.Wrap(err, "logResponse")
+		return res, errors.Wrap(err, "logResponse")
 	}
 
 	if res.StatusCode == 200 {
 		return res, nil
 	}
 
-	return nil, errors.New(res.Status)
+	return res, errors.New(res.Status)
 }
 
 func (hs3Client Hs3Client) doRequestClosedBody(req *http.Request) (res *http.Response, err error) {
 	res, err = hs3Client.doRequest(req)
 
-	if err != nil {
-		return nil, err
+	if res != nil {
+		defer func() {
+			if errClose := res.Body.Close(); errClose != nil {
+				err = errClose
+			}
+		}()
 	}
-
-	defer func() {
-		if errClose := res.Body.Close(); errClose != nil {
-			err = errClose
-		}
-	}()
 
 	return res, err
 }
