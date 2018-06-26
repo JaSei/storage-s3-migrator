@@ -22,6 +22,7 @@ var (
 	pass               = kingpin.Flag("pass", "password").Required().String()
 	customLastModified = kingpin.Flag("custom-last-modifed", "set x-amz-meta-Last-Modified header with last modification time of source file").Bool()
 	debug              = kingpin.Flag("debug", "log debug").Bool()
+	delete             = kingpin.Flag("delete", "delete source path after succes migration").Bool()
 )
 
 func main() {
@@ -68,6 +69,9 @@ func main() {
 					if err = s3cli.ExistsObject(path); err == nil {
 						dirStat.exists++
 						log.Infof("Path %s already inserted", path)
+						if *delete {
+							deleteSource(path)
+						}
 					} else {
 						err := retry.Do(
 							func() error {
@@ -93,6 +97,9 @@ func main() {
 						} else {
 							dirStat.ok++
 							log.Info(path)
+							if *delete {
+								deleteSource(path)
+							}
 						}
 					}
 
@@ -119,4 +126,12 @@ func newClient() hs3.Hs3Client {
 	}
 
 	return cli
+}
+
+func deleteSource(path pathutil.Path) {
+	if err := path.Remove(); err != nil {
+		log.Error(errors.Wrap(err, "Delete source path fail"))
+	} else {
+		log.Infof("Source path %s deleted", path)
+	}
 }
